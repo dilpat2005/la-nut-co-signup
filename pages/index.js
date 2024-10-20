@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../utils/supabaseClient'
+import { createTodosTable, fetchTodos, addTodo, toggleTodoCompletion } from '../utils/dbOperations'
 
 export default function Home() {
   const [todos, setTodos] = useState([])
@@ -7,87 +7,45 @@ export default function Home() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    checkTodosTable()
-    fetchTodos()
+    async function initializeApp() {
+      try {
+        await createTodosTable()
+        await fetchAndSetTodos()
+      } catch (error) {
+        console.error('Error initializing app:', error)
+        setError('Failed to initialize app. Please try again.')
+      }
+    }
+    initializeApp()
   }, [])
 
-  async function checkTodosTable() {
+  async function fetchAndSetTodos() {
     try {
-      const { error } = await supabase
-        .from('todos')
-        .select('id')
-        .limit(1)
-
-      if (error) {
-        console.error('Error checking todos table:', error)
-        setError(`Failed to check todos table: ${error.message}`)
-      } else {
-        console.log('Todos table exists and is accessible')
-      }
-    } catch (error) {
-      console.error('Error in checkTodosTable function:', error)
-      setError(`Failed in checkTodosTable function: ${error.message}`)
-    }
-  }
-
-  async function fetchTodos() {
-    try {
-      console.log('Fetching todos...')
-      let { data, error } = await supabase
-        .from('todos')
-        .select('*')
-        .order('id', { ascending: true })
-      
-      if (error) throw error
-      console.log('Fetched todos:', data)
-      setTodos(data || [])
+      const fetchedTodos = await fetchTodos()
+      setTodos(fetchedTodos)
     } catch (error) {
       console.error('Error fetching todos:', error)
-      setError(`Failed to fetch todos: ${error.message || 'Unknown error'}. Details: ${JSON.stringify(error, null, 2)}`)
+      setError('Failed to fetch todos. Please try again.')
     }
   }
 
-  async function addTodo() {
+  async function handleAddTodo() {
     if (newTodoTitle.trim() === '') return
     try {
-      console.log('Adding todo:', newTodoTitle)
-      const { data, error } = await supabase
-        .from('todos')
-        .insert([{ title: newTodoTitle, is_complete: false }])
-        .select()
-      
-      console.log('Supabase response:', { data, error })
-      
-      if (error) {
-        console.error('Supabase error:', error)
-        throw error
-      }
-      if (data && data.length > 0) {
-        console.log('Todo added successfully:', data)
-        setTodos([...todos, ...data])
-        setNewTodoTitle('')
-      } else {
-        console.error('No data returned from Supabase')
-        throw new Error('No data returned from database')
-      }
+      const newTodo = await addTodo(newTodoTitle)
+      setTodos([...todos, newTodo])
+      setNewTodoTitle('')
     } catch (error) {
       console.error('Error adding todo:', error)
-      setError(`Failed to add todo: ${error.message || 'Unknown error'}. Details: ${JSON.stringify(error, null, 2)}`)
+      setError('Failed to add todo. Please try again.')
     }
   }
 
-  console.log('Current todos:', todos)
-
-  async function toggleTodoCompletion(id, is_complete) {
+  async function handleToggleTodoCompletion(id, is_complete) {
     try {
-      const { error } = await supabase
-        .from('todos')
-        .update({ is_complete: !is_complete })
-        .eq('id', id)
-      
-      if (error) throw error
+      const updatedTodo = await toggleTodoCompletion(id, is_complete)
       setTodos(todos.map(todo => 
-        todo.id === id ? { ...todo, is_complete: !is_complete } : todo
+        todo.id === id ? updatedTodo : todo
       ))
     } catch (error) {
       console.error('Error updating todo:', error)
@@ -107,7 +65,7 @@ export default function Home() {
           className="border p-2 mr-2"
           placeholder="Enter a new todo"
         />
-        <button onClick={addTodo} className="bg-blue-500 text-white p-2 rounded">
+        <button onClick={handleAddTodo} className="bg-blue-500 text-white p-2 rounded">
           Add Todo
         </button>
       </div>
@@ -117,7 +75,7 @@ export default function Home() {
             <input
               type="checkbox"
               checked={todo.is_complete}
-              onChange={() => toggleTodoCompletion(todo.id, todo.is_complete)}
+              onChange={() => handleToggleTodoCompletion(todo.id, todo.is_complete)}
               className="mr-2"
             />
             <span className={todo.is_complete ? 'line-through' : ''}>
