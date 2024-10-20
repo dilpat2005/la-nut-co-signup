@@ -49,6 +49,9 @@ export async function addContact(email, phone) {
       'INSERT INTO contacts (email, phone) VALUES ($1, $2) RETURNING *',
       [email, phone]
     )
+    if (result.rows.length === 0) {
+      throw new Error('Failed to insert contact')
+    }
     return result.rows[0]
   } catch (error) {
     console.error('Error adding contact:', error)

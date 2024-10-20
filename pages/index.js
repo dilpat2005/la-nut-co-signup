@@ -40,6 +40,9 @@ export default function Home() {
         },
         body: JSON.stringify({ email: newEmail, phone: newPhone }),
       })
+      if (!response.ok) {
+        throw new Error('Failed to add contact')
+      }
       const newContact = await response.json()
       setContacts([...contacts, newContact])
       setNewEmail('')
