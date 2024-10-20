@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { createTodosTable, fetchTodos, addTodo, toggleTodoCompletion } from '../utils/dbOperations'
 
 export default function Home() {
   const [todos, setTodos] = useState([])
@@ -9,7 +8,7 @@ export default function Home() {
   useEffect(() => {
     async function initializeApp() {
       try {
-        await createTodosTable()
+        await fetch('/api/createTodosTable');
         await fetchAndSetTodos()
       } catch (error) {
         console.error('Error initializing app:', error)
@@ -21,7 +20,8 @@ export default function Home() {
 
   async function fetchAndSetTodos() {
     try {
-      const fetchedTodos = await fetchTodos()
+      const response = await fetch('/api/todos')
+      const fetchedTodos = await response.json()
       setTodos(fetchedTodos)
     } catch (error) {
       console.error('Error fetching todos:', error)
@@ -32,7 +32,14 @@ export default function Home() {
   async function handleAddTodo() {
     if (newTodoTitle.trim() === '') return
     try {
-      const newTodo = await addTodo(newTodoTitle)
+      const response = await fetch('/api/todos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: newTodoTitle }),
+      })
+      const newTodo = await response.json()
       setTodos([...todos, newTodo])
       setNewTodoTitle('')
     } catch (error) {
@@ -43,7 +50,14 @@ export default function Home() {
 
   async function handleToggleTodoCompletion(id, is_complete) {
     try {
-      const updatedTodo = await toggleTodoCompletion(id, is_complete)
+      const response = await fetch(`/api/todos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ is_complete: !is_complete }),
+      })
+      const updatedTodo = await response.json()
       setTodos(todos.map(todo => 
         todo.id === id ? updatedTodo : todo
       ))

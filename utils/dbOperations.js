@@ -1,6 +1,9 @@
 import { pool } from './supabaseClient'
 
 export async function createTodosTable() {
+  if (typeof window !== 'undefined') {
+    throw new Error('This function can only be called on the server side');
+  }
   const client = await pool.connect()
   try {
     await client.query(`
@@ -21,6 +24,9 @@ export async function createTodosTable() {
 }
 
 export async function fetchTodos() {
+  if (typeof window !== 'undefined') {
+    throw new Error('This function can only be called on the server side');
+  }
   const client = await pool.connect()
   try {
     const result = await client.query('SELECT * FROM todos ORDER BY id ASC')
@@ -34,6 +40,9 @@ export async function fetchTodos() {
 }
 
 export async function addTodo(title) {
+  if (typeof window !== 'undefined') {
+    throw new Error('This function can only be called on the server side');
+  }
   const client = await pool.connect()
   try {
     const result = await client.query(
@@ -50,6 +59,9 @@ export async function addTodo(title) {
 }
 
 export async function toggleTodoCompletion(id, is_complete) {
+  if (typeof window !== 'undefined') {
+    throw new Error('This function can only be called on the server side');
+  }
   const client = await pool.connect()
   try {
     const result = await client.query(
