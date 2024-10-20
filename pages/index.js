@@ -33,14 +33,21 @@ export default function Home() {
         .insert([{ title: newTodoTitle, is_complete: false }])
         .select()
       
-      if (error) throw error
+      if (error) {
+        console.error('Supabase error:', error)
+        throw error
+      }
       if (data) {
+        console.log('Todo added successfully:', data)
         setTodos([...todos, ...data])
         setNewTodoTitle('')
+      } else {
+        console.error('No data returned from Supabase')
+        throw new Error('No data returned from database')
       }
     } catch (error) {
       console.error('Error adding todo:', error)
-      setError('Failed to add todo. Please try again.')
+      setError(`Failed to add todo: ${error.message || 'Unknown error'}`)
     }
   }
 
