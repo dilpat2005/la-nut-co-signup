@@ -4,52 +4,65 @@ import { supabase } from '../utils/supabaseClient'
 export default function Home() {
   const [todos, setTodos] = useState([])
   const [newTodoTitle, setNewTodoTitle] = useState('')
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     fetchTodos()
   }, [])
 
   async function fetchTodos() {
-    const { data, error } = await supabase
-      .from('todos')
-      .select('*')
-      .order('id', { ascending: true })
-    
-    if (error) console.log('Error fetching todos:', error)
-    else setTodos(data)
+    try {
+      const { data, error } = await supabase
+        .from('todos')
+        .select('*')
+        .order('id', { ascending: true })
+      
+      if (error) throw error
+      setTodos(data)
+    } catch (error) {
+      console.error('Error fetching todos:', error)
+      setError('Failed to fetch todos. Please try again.')
+    }
   }
 
   async function addTodo() {
     if (newTodoTitle.trim() === '') return
-    const { data, error } = await supabase
-      .from('todos')
-      .insert({ title: newTodoTitle, is_complete: false })
-      .select()
-    
-    if (error) console.log('Error adding todo:', error)
-    else {
+    try {
+      const { data, error } = await supabase
+        .from('todos')
+        .insert({ title: newTodoTitle, is_complete: false })
+        .select()
+      
+      if (error) throw error
       setTodos([...todos, ...data])
       setNewTodoTitle('')
+    } catch (error) {
+      console.error('Error adding todo:', error)
+      setError('Failed to add todo. Please try again.')
     }
   }
 
   async function toggleTodoCompletion(id, is_complete) {
-    const { error } = await supabase
-      .from('todos')
-      .update({ is_complete: !is_complete })
-      .eq('id', id)
-    
-    if (error) console.log('Error updating todo:', error)
-    else {
+    try {
+      const { error } = await supabase
+        .from('todos')
+        .update({ is_complete: !is_complete })
+        .eq('id', id)
+      
+      if (error) throw error
       setTodos(todos.map(todo => 
         todo.id === id ? { ...todo, is_complete: !is_complete } : todo
       ))
+    } catch (error) {
+      console.error('Error updating todo:', error)
+      setError('Failed to update todo. Please try again.')
     }
   }
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Todo List</h1>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
       <div className="mb-4">
         <input
           type="text"
