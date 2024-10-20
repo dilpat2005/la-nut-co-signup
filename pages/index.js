@@ -83,22 +83,22 @@ export default function Home() {
               <p>{successMessage}</p>
             </div>
           ) : (
-            <div className="mb-10 bg-white bg-opacity-80 p-8 rounded-lg shadow-lg backdrop-filter backdrop-blur-lg">
+            <div className="mb-10 bg-[#F5F5F5] bg-opacity-80 p-8 rounded-2xl shadow-lg backdrop-filter backdrop-blur-lg">
               <input
                 type="email"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
-                className="border p-3 mr-2 w-full mb-4 rounded bg-white bg-opacity-50 text-lg"
+                className="border p-3 mr-2 w-full mb-4 rounded-lg bg-white bg-opacity-50 text-lg"
                 placeholder="Enter email"
               />
               <input
                 type="tel"
                 value={newPhone}
                 onChange={(e) => setNewPhone(e.target.value)}
-                className="border p-3 mr-2 w-full mb-6 rounded bg-white bg-opacity-50 text-lg"
+                className="border p-3 mr-2 w-full mb-6 rounded-lg bg-white bg-opacity-50 text-lg"
                 placeholder="Enter phone number"
               />
-              <button onClick={handleAddContact} className="bg-green-600 text-white p-3 rounded w-full hover:bg-green-700 transition duration-300 text-xl font-semibold">
+              <button onClick={handleAddContact} className="bg-green-600 text-white p-3 rounded-lg w-full hover:bg-green-700 transition duration-300 text-xl font-semibold">
                 Add Contact
               </button>
             </div>
