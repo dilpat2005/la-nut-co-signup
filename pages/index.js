@@ -58,15 +58,22 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <video
-        autoPlay
-        loop
-        muted
-        className="absolute z-0 w-auto min-w-full min-h-full max-w-none"
-      >
-        <source src="/background-video.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <div className="absolute inset-0 z-0 bg-black">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.parentElement.style.backgroundColor = 'black';
+          }}
+        >
+          <source src="/background-video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen bg-black bg-opacity-50">
         <div className="container mx-auto p-4">
