@@ -30,10 +30,13 @@ export default function Home() {
   async function addTodo() {
     if (newTodoTitle.trim() === '') return
     try {
+      console.log('Adding todo:', newTodoTitle)
       const { data, error } = await supabase
         .from('todos')
         .insert([{ title: newTodoTitle, is_complete: false }])
         .select()
+      
+      console.log('Supabase response:', { data, error })
       
       if (error) {
         console.error('Supabase error:', error)
@@ -49,7 +52,7 @@ export default function Home() {
       }
     } catch (error) {
       console.error('Error adding todo:', error)
-      setError(`Failed to add todo: ${error.message || 'Unknown error'}. Details: ${JSON.stringify(error)}`)
+      setError(`Failed to add todo: ${error.message || 'Unknown error'}. Details: ${JSON.stringify(error, Object.getOwnPropertyNames(error))}`)
     }
   }
 
