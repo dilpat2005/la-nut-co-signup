@@ -48,7 +48,7 @@ export default function Home() {
       setContacts([...contacts, newContact])
       setNewEmail('')
       setNewPhone('')
-      setSuccessMessage('Thank you for submitting your information!')
+      setSuccessMessage('Thank you for submitting your information! We appreciate your interest in Los Angeles Nut Company.')
       setTimeout(() => setSuccessMessage(''), 5000) // Clear message after 5 seconds
     } catch (error) {
       console.error('Error adding contact:', error)
@@ -92,17 +92,11 @@ export default function Home() {
               Add Contact
             </button>
           </div>
-          <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-md backdrop-filter backdrop-blur-lg">
-            <h2 className="text-2xl font-semibold mb-4 text-green-800">Contact List</h2>
-            <ul>
-              {contacts.map(contact => (
-                <li key={contact.id} className="mb-2 p-2 border-b border-gray-200">
-                  <span className="mr-4 font-medium">Email: {contact.email}</span>
-                  <span className="font-medium">Phone: {contact.phone}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {successMessage && (
+            <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-md backdrop-filter backdrop-blur-lg mt-8">
+              <p className="text-green-600 font-semibold text-center text-xl">{successMessage}</p>
+            </div>
+          )}
           <div className="mt-8 text-sm text-white bg-black bg-opacity-50 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-lg">
             <p className="mb-2"><strong>Disclaimer:</strong> By submitting your information, you agree that Los Angeles Nut Company may use your email and phone number for:</p>
             <ul className="list-disc pl-5 mb-2">
