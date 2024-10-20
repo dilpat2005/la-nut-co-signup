@@ -7,8 +7,19 @@ export default function Home() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    createTodosTable()
     fetchTodos()
   }, [])
+
+  async function createTodosTable() {
+    try {
+      const { error } = await supabase.rpc('create_todos_table')
+      if (error) throw error
+    } catch (error) {
+      console.error('Error creating todos table:', error)
+      setError(`Failed to create todos table: ${error.message}`)
+    }
+  }
 
   async function fetchTodos() {
     try {
