@@ -1,6 +1,27 @@
 import { useState, useEffect } from 'react'
 
 export default function Home() {
+  useEffect(() => {
+    const resizeVideo = () => {
+      const iframe = document.querySelector('iframe');
+      if (iframe) {
+        const aspectRatio = 16 / 9;
+        const windowRatio = window.innerWidth / window.innerHeight;
+        if (windowRatio > aspectRatio) {
+          iframe.style.width = '100vw';
+          iframe.style.height = '56.25vw'; // 16:9 aspect ratio
+        } else {
+          iframe.style.width = '177.78vh'; // 16:9 aspect ratio
+          iframe.style.height = '100vh';
+        }
+      }
+    };
+
+    window.addEventListener('resize', resizeVideo);
+    resizeVideo();
+
+    return () => window.removeEventListener('resize', resizeVideo);
+  }, []);
   const [contacts, setContacts] = useState([])
   const [newEmail, setNewEmail] = useState('')
   const [newPhone, setNewPhone] = useState('')
@@ -59,20 +80,13 @@ export default function Home() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <div className="absolute inset-0 z-0 bg-black">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.parentElement.style.backgroundColor = 'black';
-          }}
-        >
-          <source src="/background-video.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <iframe
+          src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&mute=1&controls=0&loop=1&playlist=VIDEO_ID"
+          className="absolute inset-0 w-full h-full"
+          frameBorder="0"
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+        ></iframe>
       </div>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen bg-black bg-opacity-50">
