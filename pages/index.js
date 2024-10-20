@@ -61,7 +61,7 @@ export default function Home() {
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center"
         style={{
-          backgroundImage: "url('/static-background.jpg')",
+          backgroundImage: "url('https://cdn.pixabay.com/photo/2015/12/12/14/57/giant-cashew-1089779_1280.jpg')",
           filter: "brightness(50%)"
         }}
       ></div>
