@@ -13,10 +13,24 @@ export default function Home() {
 
   async function createTodosTable() {
     try {
-      const { error } = await supabase.from('todos').select('id').limit(1)
-      
+      const { error } = await supabase
+        .from('todos')
+        .select('id')
+        .limit(1)
+
       if (error && error.code === '42P01') {  // Table doesn't exist
-        const { error: createError } = await supabase.rpc('create_todos_table')
+        const { error: createError } = await supabase
+          .from('todos')
+          .create([
+            { 
+              id: 'int8',
+              title: 'text',
+              is_complete: 'bool',
+              created_at: 'timestamptz'
+            }
+          ])
+          .select()
+
         if (createError) {
           console.error('Error creating todos table:', createError)
           setError(`Failed to create todos table: ${createError.message}`)
