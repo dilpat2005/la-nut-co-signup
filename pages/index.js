@@ -67,10 +67,10 @@ export default function Home() {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-md mx-auto p-6 flex flex-col items-center">
-        <h1 className="text-6xl font-bold mb-10 text-center text-white">Los Angeles Nut Company Contact List</h1>
+      <div className="relative z-10 w-full max-w-md mx-auto p-6 flex flex-col items-center justify-center">
+        <h1 className="text-5xl font-bold mb-10 text-center text-white">Los Angeles Nut Company Contact List</h1>
         
-        <div className="w-full">
+        <div className="w-full flex flex-col items-center">
           {error && (
             <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg text-lg">
               <p className="font-bold">Error:</p>
@@ -103,7 +103,7 @@ export default function Home() {
               </button>
             </div>
           )}
-          <div className="mt-10 text-base text-white bg-black bg-opacity-50 p-6 rounded-lg shadow-lg backdrop-filter backdrop-blur-lg text-center">
+          <div className="mt-10 text-base text-white bg-black bg-opacity-50 p-6 rounded-lg shadow-lg backdrop-filter backdrop-blur-lg text-center w-full">
             <p className="mb-3"><strong>Disclaimer:</strong> By submitting your information, you agree that Los Angeles Nut Company may use your email and phone number for:</p>
             <ul className="list-disc pl-6 mb-3">
               <li>Remarketing purposes</li>
