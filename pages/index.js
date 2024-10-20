@@ -7,45 +7,26 @@ export default function Home() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    createTodosTable()
+    checkTodosTable()
     fetchTodos()
   }, [])
 
-  async function createTodosTable() {
+  async function checkTodosTable() {
     try {
       const { error } = await supabase
         .from('todos')
         .select('id')
         .limit(1)
 
-      if (error && error.code === '42P01') {  // Table doesn't exist
-        const { error: createError } = await supabase
-          .from('todos')
-          .create([
-            { 
-              id: 'int8',
-              title: 'text',
-              is_complete: 'bool',
-              created_at: 'timestamptz'
-            }
-          ])
-          .select()
-
-        if (createError) {
-          console.error('Error creating todos table:', createError)
-          setError(`Failed to create todos table: ${createError.message}`)
-        } else {
-          console.log('Todos table created successfully')
-        }
-      } else if (error) {
+      if (error) {
         console.error('Error checking todos table:', error)
         setError(`Failed to check todos table: ${error.message}`)
       } else {
-        console.log('Todos table already exists')
+        console.log('Todos table exists and is accessible')
       }
     } catch (error) {
-      console.error('Error in createTodosTable function:', error)
-      setError(`Failed in createTodosTable function: ${error.message}`)
+      console.error('Error in checkTodosTable function:', error)
+      setError(`Failed in checkTodosTable function: ${error.message}`)
     }
   }
 
