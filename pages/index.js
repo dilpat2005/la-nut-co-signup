@@ -13,26 +13,9 @@ export default function Home() {
 
   async function createTodosTable() {
     try {
-      const { error } = await supabase
-        .from('todos')
-        .select('*')
-        .limit(1)
-
-      if (error && error.code === '42P01') {
-        // Table doesn't exist, so create it
-        const { error: createError } = await supabase.query(`
-          CREATE TABLE IF NOT EXISTS todos (
-            id SERIAL PRIMARY KEY,
-            title TEXT NOT NULL,
-            is_complete BOOLEAN NOT NULL DEFAULT FALSE,
-            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-          )
-        `)
-        if (createError) throw createError
-        console.log('Todos table created successfully')
-      } else if (error) {
-        throw error
-      }
+      const { data, error } = await supabase.rpc('create_todos_table')
+      if (error) throw error
+      console.log('Todos table created successfully:', data)
     } catch (error) {
       console.error('Error creating todos table:', error)
       setError(`Failed to create todos table: ${error.message}`)
