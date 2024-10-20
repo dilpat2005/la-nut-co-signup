@@ -71,30 +71,36 @@ export default function Home() {
       <div className="relative z-10 flex items-center justify-center min-h-screen bg-black bg-opacity-50">
         <div className="container mx-auto p-4">
           <h1 className="text-5xl font-bold mb-8 text-center text-white">Los Angeles Nut Company Contact List</h1>
-          {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-          {successMessage && <p className="text-green-500 mb-4 text-center font-semibold">{successMessage}</p>}
-          <div className="mb-8 bg-white bg-opacity-80 p-6 rounded-lg shadow-md backdrop-filter backdrop-blur-lg">
-            <input
-              type="email"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              className="border p-2 mr-2 w-full mb-2 rounded bg-white bg-opacity-50"
-              placeholder="Enter email"
-            />
-            <input
-              type="tel"
-              value={newPhone}
-              onChange={(e) => setNewPhone(e.target.value)}
-              className="border p-2 mr-2 w-full mb-4 rounded bg-white bg-opacity-50"
-              placeholder="Enter phone number"
-            />
-            <button onClick={handleAddContact} className="bg-green-600 text-white p-2 rounded w-full hover:bg-green-700 transition duration-300">
-              Add Contact
-            </button>
-          </div>
-          {successMessage && (
-            <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-md backdrop-filter backdrop-blur-lg mt-8">
-              <p className="text-green-600 font-semibold text-center text-xl">{successMessage}</p>
+          {error && (
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded-lg">
+              <p className="font-bold">Error:</p>
+              <p>{error}</p>
+            </div>
+          )}
+          {successMessage ? (
+            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-lg">
+              <p className="font-bold">Success:</p>
+              <p>{successMessage}</p>
+            </div>
+          ) : (
+            <div className="mb-8 bg-white bg-opacity-80 p-6 rounded-lg shadow-md backdrop-filter backdrop-blur-lg">
+              <input
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                className="border p-2 mr-2 w-full mb-2 rounded bg-white bg-opacity-50"
+                placeholder="Enter email"
+              />
+              <input
+                type="tel"
+                value={newPhone}
+                onChange={(e) => setNewPhone(e.target.value)}
+                className="border p-2 mr-2 w-full mb-4 rounded bg-white bg-opacity-50"
+                placeholder="Enter phone number"
+              />
+              <button onClick={handleAddContact} className="bg-green-600 text-white p-2 rounded w-full hover:bg-green-700 transition duration-300">
+                Add Contact
+              </button>
             </div>
           )}
           <div className="mt-8 text-sm text-white bg-black bg-opacity-50 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-lg">
