@@ -13,16 +13,25 @@ export default function Home() {
 
   async function createTodosTable() {
     try {
-      const { data, error } = await supabase.rpc('create_todos_table')
-      if (error) {
-        console.error('Error creating todos table:', error)
-        setError(`Failed to create todos table: ${error.message}`)
+      const { error } = await supabase.from('todos').select('id').limit(1)
+      
+      if (error && error.code === '42P01') {  // Table doesn't exist
+        const { error: createError } = await supabase.rpc('create_todos_table')
+        if (createError) {
+          console.error('Error creating todos table:', createError)
+          setError(`Failed to create todos table: ${createError.message}`)
+        } else {
+          console.log('Todos table created successfully')
+        }
+      } else if (error) {
+        console.error('Error checking todos table:', error)
+        setError(`Failed to check todos table: ${error.message}`)
       } else {
-        console.log('Todos table creation result:', data)
+        console.log('Todos table already exists')
       }
     } catch (error) {
-      console.error('Error calling create_todos_table function:', error)
-      setError(`Failed to call create_todos_table function: ${error.message}`)
+      console.error('Error in createTodosTable function:', error)
+      setError(`Failed in createTodosTable function: ${error.message}`)
     }
   }
 
