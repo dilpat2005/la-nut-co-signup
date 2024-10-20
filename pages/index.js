@@ -1,27 +1,6 @@
 import { useState, useEffect } from 'react'
 
 export default function Home() {
-  useEffect(() => {
-    const resizeVideo = () => {
-      const iframe = document.querySelector('iframe');
-      if (iframe) {
-        const aspectRatio = 16 / 9;
-        const windowRatio = window.innerWidth / window.innerHeight;
-        if (windowRatio > aspectRatio) {
-          iframe.style.width = '100vw';
-          iframe.style.height = '56.25vw'; // 16:9 aspect ratio
-        } else {
-          iframe.style.width = '177.78vh'; // 16:9 aspect ratio
-          iframe.style.height = '100vh';
-        }
-      }
-    };
-
-    window.addEventListener('resize', resizeVideo);
-    resizeVideo();
-
-    return () => window.removeEventListener('resize', resizeVideo);
-  }, []);
   const [contacts, setContacts] = useState([])
   const [newEmail, setNewEmail] = useState('')
   const [newPhone, setNewPhone] = useState('')
@@ -79,17 +58,15 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="absolute inset-0 z-0 bg-black">
-        <iframe
-          src="https://www.youtube.com/embed/videoseries?list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG&autoplay=1&mute=1&controls=0&loop=1"
-          className="absolute inset-0 w-full h-full"
-          frameBorder="0"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        ></iframe>
-      </div>
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/background-image.jpg')",
+          filter: "brightness(50%)"
+        }}
+      ></div>
 
-      <div className="relative z-10 flex items-center justify-center min-h-screen bg-black bg-opacity-50">
+      <div className="relative z-10 flex items-center justify-center min-h-screen">
         <div className="container mx-auto p-4">
           <h1 className="text-5xl font-bold mb-8 text-center text-white">Los Angeles Nut Company Contact List</h1>
           {error && (
