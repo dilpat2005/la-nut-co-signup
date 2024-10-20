@@ -81,7 +81,7 @@ export default function Home() {
     <div className="relative min-h-screen overflow-hidden">
       <div className="absolute inset-0 z-0 bg-black">
         <iframe
-          src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&mute=1&controls=0&loop=1&playlist=VIDEO_ID"
+          src="https://www.youtube.com/embed/OqMRwK-pl3w?autoplay=1&mute=1&controls=0&loop=1&playlist=OqMRwK-pl3w"
           className="absolute inset-0 w-full h-full"
           frameBorder="0"
           allow="autoplay; encrypted-media"
