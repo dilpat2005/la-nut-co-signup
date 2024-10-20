@@ -23,7 +23,7 @@ export default function Home() {
       setTodos(data || [])
     } catch (error) {
       console.error('Error fetching todos:', error)
-      setError('Failed to fetch todos. Please try again.')
+      setError(`Failed to fetch todos: ${error.message || 'Unknown error'}. Details: ${JSON.stringify(error, null, 2)}`)
     }
   }
 
@@ -42,7 +42,7 @@ export default function Home() {
         console.error('Supabase error:', error)
         throw error
       }
-      if (data) {
+      if (data && data.length > 0) {
         console.log('Todo added successfully:', data)
         setTodos([...todos, ...data])
         setNewTodoTitle('')
@@ -52,7 +52,7 @@ export default function Home() {
       }
     } catch (error) {
       console.error('Error adding todo:', error)
-      setError(`Failed to add todo: ${error.message || 'Unknown error'}. Details: ${JSON.stringify(error, Object.getOwnPropertyNames(error))}`)
+      setError(`Failed to add todo: ${error.message || 'Unknown error'}. Details: ${JSON.stringify(error, null, 2)}`)
     }
   }
 
