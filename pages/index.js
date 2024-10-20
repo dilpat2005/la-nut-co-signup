@@ -59,9 +59,9 @@ export default function Home() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <div 
-        className="absolute inset-0 z-0 bg-cover bg-center"
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('https://cdn.pixabay.com/photo/2015/12/12/14/57/giant-cashew-1089779_1280.jpg')",
+          backgroundImage: "url('https://images.unsplash.com/photo-1606913084603-3e7702b01627?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80')",
           filter: "brightness(50%)"
         }}
       ></div>
