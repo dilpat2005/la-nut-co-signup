@@ -14,11 +14,15 @@ export default function Home() {
   async function createTodosTable() {
     try {
       const { data, error } = await supabase.rpc('create_todos_table')
-      if (error) throw error
-      console.log('Todos table created successfully:', data)
+      if (error) {
+        console.error('Error creating todos table:', error)
+        setError(`Failed to create todos table: ${error.message}`)
+      } else {
+        console.log('Todos table creation result:', data)
+      }
     } catch (error) {
-      console.error('Error creating todos table:', error)
-      setError(`Failed to create todos table: ${error.message}`)
+      console.error('Error calling create_todos_table function:', error)
+      setError(`Failed to call create_todos_table function: ${error.message}`)
     }
   }
 
