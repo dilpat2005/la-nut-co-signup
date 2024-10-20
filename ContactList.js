@@ -30,11 +30,15 @@ export default function ContactList() {
   return (
     <div>
       <h2>Contacts</h2>
-      <ul>
-        {contacts.map(contact => (
-          <li key={contact.id}>{contact.name}</li>
-        ))}
-      </ul>
+      {contacts.length === 0 ? (
+        <p>No contacts available.</p>
+      ) : (
+        <ul>
+          {contacts.map(contact => (
+            <li key={contact.id}>{contact.email} - {contact.phone}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
