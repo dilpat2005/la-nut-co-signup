@@ -12,13 +12,13 @@ export default function Home() {
 
   async function fetchTodos() {
     try {
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('todos')
         .select('*')
         .order('id', { ascending: true })
       
       if (error) throw error
-      setTodos(data)
+      setTodos(data || [])
     } catch (error) {
       console.error('Error fetching todos:', error)
       setError('Failed to fetch todos. Please try again.')
@@ -30,12 +30,14 @@ export default function Home() {
     try {
       const { data, error } = await supabase
         .from('todos')
-        .insert({ title: newTodoTitle, is_complete: false })
+        .insert([{ title: newTodoTitle, is_complete: false }])
         .select()
       
       if (error) throw error
-      setTodos([...todos, ...data])
-      setNewTodoTitle('')
+      if (data) {
+        setTodos([...todos, ...data])
+        setNewTodoTitle('')
+      }
     } catch (error) {
       console.error('Error adding todo:', error)
       setError('Failed to add todo. Please try again.')
