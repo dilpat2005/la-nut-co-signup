@@ -1,76 +1,57 @@
 import { pool } from './supabaseClient'
 
-export async function createTodosTable() {
+export async function createContactsTable() {
   if (typeof window !== 'undefined') {
     throw new Error('This function can only be called on the server side');
   }
   const client = await pool.connect()
   try {
     await client.query(`
-      CREATE TABLE IF NOT EXISTS todos (
+      CREATE TABLE IF NOT EXISTS contacts (
         id SERIAL PRIMARY KEY,
-        title TEXT NOT NULL,
-        is_complete BOOLEAN DEFAULT FALSE,
+        email TEXT NOT NULL,
+        phone TEXT NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `)
-    console.log('Todos table created successfully')
+    console.log('Contacts table created successfully')
   } catch (error) {
-    console.error('Error creating todos table:', error)
+    console.error('Error creating contacts table:', error)
     throw error
   } finally {
     client.release()
   }
 }
 
-export async function fetchTodos() {
+export async function fetchContacts() {
   if (typeof window !== 'undefined') {
     throw new Error('This function can only be called on the server side');
   }
   const client = await pool.connect()
   try {
-    const result = await client.query('SELECT * FROM todos ORDER BY id ASC')
+    const result = await client.query('SELECT * FROM contacts ORDER BY id ASC')
     return result.rows
   } catch (error) {
-    console.error('Error fetching todos:', error)
+    console.error('Error fetching contacts:', error)
     throw error
   } finally {
     client.release()
   }
 }
 
-export async function addTodo(title) {
+export async function addContact(email, phone) {
   if (typeof window !== 'undefined') {
     throw new Error('This function can only be called on the server side');
   }
   const client = await pool.connect()
   try {
     const result = await client.query(
-      'INSERT INTO todos (title) VALUES ($1) RETURNING *',
-      [title]
+      'INSERT INTO contacts (email, phone) VALUES ($1, $2) RETURNING *',
+      [email, phone]
     )
     return result.rows[0]
   } catch (error) {
-    console.error('Error adding todo:', error)
-    throw error
-  } finally {
-    client.release()
-  }
-}
-
-export async function toggleTodoCompletion(id, is_complete) {
-  if (typeof window !== 'undefined') {
-    throw new Error('This function can only be called on the server side');
-  }
-  const client = await pool.connect()
-  try {
-    const result = await client.query(
-      'UPDATE todos SET is_complete = $1 WHERE id = $2 RETURNING *',
-      [!is_complete, id]
-    )
-    return result.rows[0]
-  } catch (error) {
-    console.error('Error updating todo:', error)
+    console.error('Error adding contact:', error)
     throw error
   } finally {
     client.release()
