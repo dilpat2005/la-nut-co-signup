@@ -12,12 +12,14 @@ export default function Home() {
 
   async function fetchTodos() {
     try {
+      console.log('Fetching todos...')
       let { data, error } = await supabase
         .from('todos')
         .select('*')
         .order('id', { ascending: true })
       
       if (error) throw error
+      console.log('Fetched todos:', data)
       setTodos(data || [])
     } catch (error) {
       console.error('Error fetching todos:', error)
@@ -47,9 +49,11 @@ export default function Home() {
       }
     } catch (error) {
       console.error('Error adding todo:', error)
-      setError(`Failed to add todo: ${error.message || 'Unknown error'}`)
+      setError(`Failed to add todo: ${error.message || 'Unknown error'}. Details: ${JSON.stringify(error)}`)
     }
   }
+
+  console.log('Current todos:', todos)
 
   async function toggleTodoCompletion(id, is_complete) {
     try {
